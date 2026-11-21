@@ -1,0 +1,8 @@
+*.cf
+*.dll
+*.o
+*.fst
+*.vpi
+*.ghw
+*.gtkw
+*.vcd
