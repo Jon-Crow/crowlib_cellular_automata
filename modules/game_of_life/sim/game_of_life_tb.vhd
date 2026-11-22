@@ -44,7 +44,7 @@ architecture game_of_life_tb_arch of game_of_life_tb is
     variable val : t_slv_arr(0 to K_HEIGHT-1)(K_WIDTH-1 downto 0) := (others => (others => '0'));
   begin
     for i in 0 to K_HEIGHT-1 loop
-      val(i) := f_rand_slv(K_WIDTH, salt);
+      val(i) := f_rand_slv(K_WIDTH, salt+i);
     end loop;
     return val;
   end function f_rand_init;
@@ -103,7 +103,7 @@ begin
       alive => alive
   );
 
-  u_display : entity crowlib.sim_display
+  u_display : entity crowlib.sim_display_bw
     generic map (
       G_WIDTH  => K_WIDTH,
       G_HEIGHT => K_HEIGHT

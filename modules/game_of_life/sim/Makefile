@@ -3,6 +3,9 @@ SEED ?= $(shell powershell -NoProfile -Command "[DateTimeOffset]::UtcNow.ToUnixT
 
 include $(CROWLIB_PATH)/crowlib_ghdl.mk
 
+clean:
+	del *.cf *.fst *.o *.exe
+
 analyze::
 	ghdl -a --std=08 ../hdl/game_of_life_cell.vhd \
                    ../hdl/game_of_life.vhd \
