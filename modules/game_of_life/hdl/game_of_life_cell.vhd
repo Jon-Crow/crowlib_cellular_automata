@@ -7,7 +7,8 @@ library crowlib;
 
 entity game_of_life_cell is
   generic (
-    G_INIT : std_logic_vector(0 downto 0) := (others => '0')
+    G_INIT   : std_logic_vector(0 downto 0) := (others => '0');
+    G_CONFIG : std_logic_vector(0 downto 0) := (others => '0')
   );
   port (
     clk   : in  std_logic;

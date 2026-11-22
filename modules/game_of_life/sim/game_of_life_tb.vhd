@@ -20,10 +20,12 @@ architecture game_of_life_tb_arch of game_of_life_tb is
 
   component cellular_automata_grid is
     generic (
-      G_WIDTH       : natural := 256;
-      G_HEIGHT      : natural := 256;
-      G_STATE_WIDTH : natural := 1;
-      G_INIT        : t_slv_arr_2d(0 to G_HEIGHT-1)(0 to G_WIDTH-1)(G_STATE_WIDTH-1 downto 0)
+      G_WIDTH        : natural                                                                 := 256;
+      G_HEIGHT       : natural                                                                 := 256;
+      G_STATE_WIDTH  : natural                                                                 := 1;
+      G_INIT         : t_slv_arr_2d(0 to G_HEIGHT-1)(0 to G_WIDTH-1)(G_STATE_WIDTH-1 downto 0) := (others => (others => (others => '0')));
+      G_CONFIG_WIDTH : positive                                                                := 1;
+      G_CONFIG       : std_logic_vector(G_CONFIG_WIDTH-1 downto 0)                             := (others => '0')
     );
     port (
       clk    : in  std_logic;
@@ -106,10 +108,12 @@ begin
 
   u_dut : cellular_automata_grid
     generic map (
-      G_WIDTH       => K_WIDTH,
-      G_HEIGHT      => K_HEIGHT,
-      G_STATE_WIDTH => 1,
-      G_INIT        => K_INIT
+      G_WIDTH        => K_WIDTH,
+      G_HEIGHT       => K_HEIGHT,
+      G_STATE_WIDTH  => 1,
+      G_INIT         => K_INIT,
+      G_CONFIG_WIDTH => 1,
+      G_CONFIG       => (others => '0')
     )
     port map (
       clk    => clk,

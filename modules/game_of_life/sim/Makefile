@@ -8,7 +8,6 @@ clean:
 
 analyze::
 	ghdl -a --std=08 ../hdl/game_of_life_cell.vhd \
-                   ../hdl/game_of_life.vhd \
 									 game_of_life_tb.vhd \
 									 game_of_life_cfg.vhd
 
