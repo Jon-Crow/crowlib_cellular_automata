@@ -5,12 +5,13 @@ library ieee;
 library crowlib;
   use crowlib.common_pkg.all;
   use crowlib.display_pkg.all;
+  use crowlib.sim_pkg.all;
 use std.env.finish;
 
 entity cca_tb is
   generic (
-    G_WIDTH  : natural := 64;
-    G_HEIGHT : natural := 64;
+    G_WIDTH  : natural  := 64;
+    G_HEIGHT : natural  := 64;
     G_SEED   : positive := 1
   );
 end entity cca_tb;
@@ -34,14 +35,17 @@ architecture cca_tb_arch of cca_tb is
     );
   end component cellular_automata_grid;
 
-  function f_rand_init (
-    salt : positive
+  impure function f_rand_init (
+    seed : t_dword
   ) return t_slv_arr_2d is
+    variable rand : t_random; 
     variable val  : t_slv_arr_2d(0 to G_HEIGHT-1)(0 to G_WIDTH-1)(3 downto 0) := (others => (others => (others => '0')));
   begin
+    rand.set_seed(seed);
     for r in 0 to G_HEIGHT-1 loop
       for c in 0 to G_WIDTH-1 loop
-        val(r)(c) := f_rand_slv(4, G_SEED, salt+(c*G_WIDTH + r));
+        --val(r)(c) := f_rand_slv(4, G_SEED, s);
+        val(r)(c) := rand.get_next(3 downto 0);
       end loop;
     end loop;
     return val;
@@ -72,7 +76,7 @@ architecture cca_tb_arch of cca_tb is
     end case;
   end function f_state_to_color;
 
-  constant K_INIT : t_slv_arr_2d(0 to G_HEIGHT-1)(0 to G_WIDTH-1)(3 downto 0) := f_rand_init(1234);
+  constant K_INIT : t_slv_arr_2d(0 to G_HEIGHT-1)(0 to G_WIDTH-1)(3 downto 0) := f_rand_init(std_logic_vector(to_unsigned(G_SEED, K_DWORD_WIDTH)));
 
   signal clk    : std_logic;
   signal rst    : std_logic;

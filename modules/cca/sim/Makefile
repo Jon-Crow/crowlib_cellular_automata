@@ -17,7 +17,7 @@ compile: analyze
 	ghdl -e --std=08 cca_cfg
 
 sim:
-	ghdl -r --std=08 cca_cfg -gG_WIDTH=$(WIDTH) -gG_HEIGHT=$(HEIGHT) -gG_SEED=$(SEED) --ieee-asserts=disable-at-0 --vpi=sim_display.vpi --fst=wave.fst
+	ghdl -r --std=08 cca_cfg -gG_WIDTH=$(WIDTH) -gG_HEIGHT=$(HEIGHT) -gG_SEED=$(SEED) --ieee-asserts=disable-at-0 --vpi=sim_display.vpi
 
 view:
 	gtkwave -a wave.gtkw wave.fst
