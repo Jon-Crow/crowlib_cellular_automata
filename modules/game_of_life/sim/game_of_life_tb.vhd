@@ -1,51 +1,55 @@
 library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
+  use ieee.math_real.all;
 library crowlib;
   use crowlib.common_pkg.all;
 use std.env.finish;
 
 entity game_of_life_tb is
+  generic (
+    G_SEED : positive := 1
+  );
 end entity game_of_life_tb;
 
 architecture game_of_life_tb_arch of game_of_life_tb is
 
-  constant K_WIDTH  : natural := 256;
-  constant K_HEIGHT : natural := 256;
+  constant K_WIDTH  : natural := 64;
+  constant K_HEIGHT : natural := 64;
   
-  type t_pattern is array (natural range <>) of string;
-
-  function f_place(
-    pat  : t_pattern;
-    row0 : natural;
-    col0 : natural
-  ) return t_slv_arr is
-    variable grid : t_slv_arr(0 to K_HEIGHT-1)(K_WIDTH-1 downto 0) := (others => (others => '0'));
+  function f_rand_slv (
+    width : natural;
+    salt  : positive
+  ) return std_logic_vector is
+    variable seed1 : positive                           := G_SEED;
+    variable seed2 : positive                           := salt;
+    variable r     : real                               := 0.0;
+    variable rand  : std_logic_vector(width-1 downto 0) := (others => '0');
   begin
-    for r in pat'range loop
-      for x in pat(r)'range loop
-        if(pat(r)(x) = 'O') then
-          grid(row0 + r - pat'low)(col0 + x - pat(r)'low) := '1';
-        end if;
-      end loop;
+    for i in 0 to 15 loop
+      uniform(seed1, seed2, r);
     end loop;
-    return grid;
-  end function f_place;
+    
+    for i in 0 to width-1 loop
+      uniform(seed1, seed2, r);
+      rand(i) := '1' when r < 0.5 else '0';
+    end loop;
+    
+    return rand;
+  end function f_rand_slv;
 
-  -- Gosper glider gun: fires a new glider down-right every 30 generations.
-  constant K_GOSPER_GUN : t_pattern := (
-    "........................O...........",
-    "......................O.O...........",
-    "............OO......OO............OO",
-    "...........O...O....OO............OO",
-    "OO........O.....O...OO..............",
-    "OO........O...O.OO....O.O...........",
-    "..........O.....O.......O...........",
-    "...........O...O....................",
-    "............OO......................"
-  );
+  function f_rand_init (
+    salt : positive
+  ) return t_slv_arr is
+    variable val : t_slv_arr(0 to K_HEIGHT-1)(K_WIDTH-1 downto 0) := (others => (others => '0'));
+  begin
+    for i in 0 to K_HEIGHT-1 loop
+      val(i) := f_rand_slv(K_WIDTH, salt);
+    end loop;
+    return val;
+  end function f_rand_init;
 
-  constant K_INIT   : t_slv_arr(0 to K_HEIGHT-1)(K_WIDTH-1 downto 0) := f_place(K_GOSPER_GUN, 10, 10);
+  constant K_INIT : t_slv_arr(0 to K_HEIGHT-1)(K_WIDTH-1 downto 0) := f_rand_init(123456);
 
   component game_of_life is
     generic (
