@@ -53,9 +53,6 @@ architecture game_of_life_arch of game_of_life is
 begin
 
   gen_rows : for r in 0 to G_HEIGHT-1 generate
-    constant RN : natural := (r - 1) mod G_HEIGHT;
-    constant RS : natural := (r + 1) mod G_HEIGHT;
-  begin
     gen_cols : for c in 0 to G_WIDTH-1 generate
 
       u_cell : game_of_life_cell
@@ -76,16 +73,55 @@ begin
           alive => alive(r)(c)
       );
 
+      gen_west : if c = 0 generate
+        w(r)(c) <= '0';
+      else generate
+        w(r)(c) <= alive(r)(c-1);
+      end generate gen_west;
+
+      gen_east : if c = G_WIDTH-1 generate
+        e(r)(c) <= '0';
+      else generate
+        e(r)(c) <= alive(r)(c+1);
+      end generate gen_east;
+
+      gen_north_west : if r = 0 or c = 0 generate
+        nw(r)(c) <= '0';
+      else generate
+        nw(r)(c) <= alive(r-1)(c-1);
+      end generate gen_north_west;
+
+      gen_north_east : if r = 0 or c = G_WIDTH-1 generate
+        ne(r)(c) <= '0';
+      else generate
+        ne(r)(c) <= alive(r-1)(c+1);
+      end generate gen_north_east;
+
+      gen_south_west : if r = G_HEIGHT-1 or c = 0 generate
+        sw(r)(c) <= '0';
+      else generate
+        sw(r)(c) <= alive(r+1)(c-1);
+      end generate gen_south_west;
+
+      gen_south_east : if r = G_HEIGHT-1 or c = G_WIDTH-1 generate
+        se(r)(c) <= '0';
+      else generate
+        se(r)(c) <= alive(r+1)(c+1);
+      end generate gen_south_east;
+
     end generate gen_cols;
 
-    n(r)  <= alive(RN);
-    ne(r) <= alive(RN)(0) & alive(RN)(G_WIDTH-1 downto 1);
-    e(r)  <= alive(r)(0)  & alive(r)(G_WIDTH-1 downto 1);
-    se(r) <= alive(RS)(0) & alive(RS)(G_WIDTH-1 downto 1);
-    s(r)  <= alive(RS);
-    sw(r) <= alive(RS)(G_WIDTH-2 downto 0) & alive(RS)(G_WIDTH-1);
-    w(r)  <= alive(r)(G_WIDTH-2 downto 0)  & alive(r)(G_WIDTH-1);
-    nw(r) <= alive(RN)(G_WIDTH-2 downto 0) & alive(RN)(G_WIDTH-1);
+    gen_north : if r = 0 generate
+      n(r) <= (others => '0');
+    else generate
+      n(r) <= alive(r-1);
+    end generate gen_north;
+
+    gen_south : if r = G_HEIGHT-1 generate
+      s(r) <= (others => '0');
+    else generate
+      s(r) <= alive(r+1);
+    end generate gen_south;
 
   end generate gen_rows;
 
