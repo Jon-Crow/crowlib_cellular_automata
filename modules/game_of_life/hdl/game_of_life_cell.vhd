@@ -7,22 +7,22 @@ library crowlib;
 
 entity game_of_life_cell is
   generic (
-    G_START_ALIVE : std_logic := '0'
+    G_INIT : std_logic_vector(0 downto 0) := (others => '0')
   );
   port (
     clk   : in  std_logic;
     rst   : in  std_logic;
 
-    n     : in  std_logic;
-    ne    : in  std_logic;
-    e     : in  std_logic;
-    se    : in  std_logic;
-    s     : in  std_logic;
-    sw    : in  std_logic;
-    w     : in  std_logic;
-    nw    : in  std_logic;
+    n     : in  std_logic_vector(0 downto 0);
+    ne    : in  std_logic_vector(0 downto 0);
+    e     : in  std_logic_vector(0 downto 0);
+    se    : in  std_logic_vector(0 downto 0);
+    s     : in  std_logic_vector(0 downto 0);
+    sw    : in  std_logic_vector(0 downto 0);
+    w     : in  std_logic_vector(0 downto 0);
+    nw    : in  std_logic_vector(0 downto 0);
 
-    alive : out std_logic
+    state : out std_logic_vector(0 downto 0)
   );
 end entity game_of_life_cell;
 
@@ -40,17 +40,17 @@ architecture game_of_life_cell_arch of game_of_life_cell is
 
 begin
 
-  alive <= alive_q;
+  state(0) <= alive_q;
 
   neighbor_count <= to_unsigned(f_count_ones_slv(neighbors), K_NEIGHBOR_COUNT_WIDTH);
-  neighbors      <= n  &
-                    ne &
-                    e  &
-                    se &
-                    s  &
-                    sw &
-                    w  &
-                    nw;
+  neighbors      <= n(0)  &
+                    ne(0) &
+                    e(0)  &
+                    se(0) &
+                    s(0)  &
+                    sw(0) &
+                    w(0)  &
+                    nw(0);
 
   c_alive : process(all)
   begin
@@ -72,7 +72,7 @@ begin
     if(rising_edge(clk)) then
       if(rst = '1') then
 
-        alive_q <= G_START_ALIVE;
+        alive_q <= G_INIT(0);
 
       else
 
