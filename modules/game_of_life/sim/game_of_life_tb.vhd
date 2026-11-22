@@ -34,27 +34,6 @@ architecture game_of_life_tb_arch of game_of_life_tb is
       states : out t_slv_arr_2d(0 to G_HEIGHT-1)(0 to G_WIDTH-1)(G_STATE_WIDTH-1 downto 0)
     );
   end component cellular_automata_grid;
-  
-  function f_rand_slv (
-    width : natural;
-    salt  : positive
-  ) return std_logic_vector is
-    variable seed1 : positive                           := G_SEED;
-    variable seed2 : positive                           := salt;
-    variable r     : real                               := 0.0;
-    variable rand  : std_logic_vector(width-1 downto 0) := (others => '0');
-  begin
-    for i in 0 to 15 loop
-      uniform(seed1, seed2, r);
-    end loop;
-    
-    for i in 0 to width-1 loop
-      uniform(seed1, seed2, r);
-      rand(i) := '1' when r < 0.5 else '0';
-    end loop;
-    
-    return rand;
-  end function f_rand_slv;
 
   function f_rand_init (
     salt : positive
@@ -63,7 +42,7 @@ architecture game_of_life_tb_arch of game_of_life_tb is
     variable rand : std_logic_vector(K_WIDTH-1 downto 0)                          := (others => '0');
   begin
     for r in 0 to K_HEIGHT-1 loop
-      rand := f_rand_slv(K_WIDTH, salt+r);
+      rand := f_rand_slv(K_WIDTH, G_SEED, salt+r);
       for c in 0 to K_WIDTH-1 loop
         val(r)(c)(0) := rand(c);
       end loop;
