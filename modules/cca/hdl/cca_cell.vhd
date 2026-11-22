@@ -38,6 +38,8 @@ architecture cca_cell_arch of cca_cell is
 
 begin
 
+  state <= state_q;
+
   tar_state <= std_logic_vector(unsigned(state_q) + to_unsigned(1, 4));
 
   neighbors(0) <= '1' when n  = tar_state else '0';

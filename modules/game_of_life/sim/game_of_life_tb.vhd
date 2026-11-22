@@ -112,6 +112,6 @@ begin
 
       px     => px,
       update => '1'
-    );
+  );
 
 end architecture game_of_life_tb_arch;
