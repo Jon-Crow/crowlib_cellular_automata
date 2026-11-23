@@ -1,4 +1,4 @@
-CROWLIB_PATH ?= ../../../../crowlib
+CROWLIB_PATH ?= ../../../crowlib
 WIDTH        ?= 64
 HEIGHT       ?= 64
 SEED         ?= $(shell powershell -NoProfile -Command "[DateTimeOffset]::UtcNow.ToUnixTimeSeconds()")

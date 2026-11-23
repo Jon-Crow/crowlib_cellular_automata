@@ -1,0 +1,3 @@
+[submodule "crowlib"]
+	path = crowlib
+	url = git@github.com:Jon-Crow/crowlib.git

@@ -1,4 +1,4 @@
-CROWLIB_PATH ?= ../../../../crowlib
+CROWLIB_PATH ?= ../../../crowlib
 SEED ?= $(shell powershell -NoProfile -Command "[DateTimeOffset]::UtcNow.ToUnixTimeSeconds()")
 
 include $(CROWLIB_PATH)/crowlib_ghdl.mk
