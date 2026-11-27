@@ -15,8 +15,14 @@ end entity game_of_life_tb;
 
 architecture game_of_life_tb_arch of game_of_life_tb is
 
-  constant K_WIDTH  : natural := 64;
-  constant K_HEIGHT : natural := 64;
+  constant K_WIDTH  : natural             := 64;
+  constant K_HEIGHT : natural             := 64;
+  constant K_KEYS   : t_nat_array(0 to 3) := (
+    K_KEY_W,
+    K_KEY_A,
+    K_KEY_S,
+    K_KEY_D
+  );
 
   component cellular_automata_grid is
     generic (
@@ -58,6 +64,8 @@ architecture game_of_life_tb_arch of game_of_life_tb is
   signal alive : t_slv_arr_2d(0 to K_HEIGHT-1)(K_WIDTH-1 downto 0)(0 downto 0);
 
   signal px    : t_color_arr_2d(0 to K_HEIGHT-1)(0 to K_WIDTH-1);
+
+  signal keys  : std_logic_vector(K_KEYS'length-1 downto 0);
 
 begin
 
@@ -104,14 +112,17 @@ begin
   u_display : entity crowlib.sim_display
     generic map (
       G_WIDTH  => K_WIDTH,
-      G_HEIGHT => K_HEIGHT
+      G_HEIGHT => K_HEIGHT,
+      G_KEYS   => K_KEYS
     )
     port map (
       clk    => clk,
       rst    => rst,
 
       px     => px,
-      update => '1'
+      update => '1',
+
+      keys   => keys
   );
 
 end architecture game_of_life_tb_arch;
